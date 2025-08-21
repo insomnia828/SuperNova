@@ -1,28 +1,296 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Nova</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Nova</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos generales para el cuerpo */
+        body {
+            transition: background-color 0.8s ease-in-out, color 0.8s ease-in-out;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            color: #e0e0e0;
+            overflow-x: hidden;
+            padding-top: 100px; /* Asegura espacio para el header */
+        }
+
+        /* Temas de constelaciones con imágenes de fondo */
+        .orion-theme {
+            background: #0d1a26 url('https://img.freepik.com/vector-gratis/ilustracion-isometrica-marte-cohete-marte-dos-astronautas-establecen-ilustracion-bandera_1284-60256.jpg?t=st=1755661868~exp=1755665468~hmac=700aa8ac378f714242464cca7ab8fcd9ed78d3b4ba269c58fbe3aefd75bb025b&w=740') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .ursa-major-theme {
+            background: #26210d url('https://img.freepik.com/vector-gratis/escena-fondo-espacio-astronauta_1308-34365.jpg?t=st=1755662161~exp=1755665761~hmac=0abb803832ae577808315f0e71bd761552194e2eec9b38552e4cce278cbb5a03&w=740') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .cygnus-theme {
+            background: #1a0d26 url('https://img.freepik.com/vector-gratis/fondo-galaxia-degradado_23-2150890719.jpg?t=st=1755662310~exp=1755665910~hmac=8e832d3ea34d32bf17213b5a1eaa38584218e8b57797e605341e456f85eec6a3&w=360') no-repeat center center fixed;
+            background-size: cover;
+        }
+        
+        /* Estilo del fondo de imagen para cada tema */
+        .bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            opacity: 0.8;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        /* Header con imagen de fondo y z-index alto */
+        .modern-header {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1465101162335-e633d7e2e71d?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
+            background-size: cover;
+            color: #fff;
+            padding: 1.5rem 1rem; /* Reducción del padding */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .modern-header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            font-family: 'Space Mono', monospace;
+            color: #fff; /* color del título */
+        }
+
+        .panel-toggle {
+            background: transparent;
+            color: #fff;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: transform 0.3s ease;
+            z-index: 1002;
+        }
+
+        .panel-toggle.open i {
+            transform: rotate(180deg);
+        }
+
+        /* Panel de Control */
+        .cosmic-panel {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1001;
+            padding: 1.5rem;
+            transition: left 0.3s ease-in-out;
+            overflow-y: auto;
+        }
+
+        .cosmic-panel.open {
+            left: 0;
+        }
+
+        .cosmic-panel h4 {
+            font-family: 'Space Mono', monospace;
+            color: #eee;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.5rem;
+        }
+
+        .cosmic-panel h5 {
+            font-family: 'Space Mono', monospace;
+            color: #eee;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.5rem;
+        }
+
+        .cosmic-panel .theme-selector label {
+            color: #ddd;
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+
+        .cosmic-panel .theme-selector .d-flex {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        /* El contenido principal ya no se desplaza */
+        .main-content {
+            padding: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .cosmic-panel {
+                width: 100%;
+                left: -100%;
+            }
+        }
+
+        /* Estilos de las tarjetas (widgets) */
+        .card {
+            background-color: rgba(255, 255, 255, 0.05); /* Ligeramente transparente */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px); /* Efecto de cristal */
+            -webkit-backdrop-filter: blur(15px);
+            color: #e0e0e0;
+            border-radius: 15px; /* Bordes más suaves */
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+            transition: transform 0.3s ease;
+            min-height: 500px; /* Asegura un tamaño mínimo para que las imágenes quepan */
+        }
+        .card:hover {
+            transform: translateY(-5px); /* Efecto de levitación */
+        }
+
+        /* Galería de Descubrimientos */
+        .carousel-item {
+            height: 400px; /* Altura del carrusel, puedes ajustar este valor */
+            text-align: center;
+        }
+        .constellation-thumbnail {
+            border-radius: 15px;
+            overflow: hidden;
+            height: 100%; /* El thumbnail toma la altura completa del carousel-item */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .constellation-thumbnail img {
+            width: auto;
+            max-width: 100%;
+            height: 100%;
+            object-fit: contain; /* Para ver la imagen completa dentro del espacio */
+            display: block;
+            border-radius: 10px;
+        }
+        .carousel-caption {
+            background-color: rgba(0,0,0,0.5);
+            padding: 0.7rem;
+            color: #fff;
+            border-radius: 10px;
+            bottom: 20px;
+            left: 10%;
+            right: 10%;
+            text-align: center;
+        }
+        /* Lienzo */
+        #cosmic-canvas {
+            width: 100%;
+            height: 400px;
+            cursor: crosshair;
+            background-color: rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        /* Botones y controles más modernos */
+        .btn {
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+        .btn-primary, .btn-warning, .btn-info, .btn-secondary, .btn-success {
+            border: none;
+        }
+
+        /* Bitácora Estelar */
+        .log-entry {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+        .log-entry:hover {
+            transform: scale(1.02);
+        }
+        .log-entry-title {
+            font-weight: bold;
+            color: #fff;
+        }
+        .log-entry-content {
+            font-size: 0.9em;
+            color: #ffffff;
+        }
+
+        /* Terminal de Comunicaciones (Formulario) */
+        #contact-form .form-control {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            font-family: 'Space Mono', monospace;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        #contact-form .form-control:focus {
+            box-shadow: 0 0 10px #00e5ff;
+            border-color: #00e5ff;
+        }
+        .terminal-error {
+            color: #ff3333;
+            animation: static-effect 0.5s infinite;
+        }
+        @keyframes static-effect {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        /* Estilo para el botón de eliminar del carrusel */
+        .delete-gallery-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .delete-gallery-btn:hover {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body class="orion-theme">
 
-<header class="modern-header">
-    <div class="header-content">
-       <h1>
-    <i class="fa-solid fa-rocket"></i> Super Nova
-</h1>
-    </div>
-    <button id="panel-toggle-btn" class="panel-toggle">
-        <i class="fa-solid fa-bars"></i>
-    </button>
-</header>
+    <header class="modern-header">
+        <div class="header-content">
+            <h1>
+                <i class="fa-solid fa-rocket"></i> Super Nova
+            </h1>
+        </div>
+        <button id="panel-toggle-btn" class="panel-toggle">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </header>
 
     <div class="star-field"></div>
 
@@ -59,18 +327,18 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-8">
-    <section class="card mb-4">
-        <div class="card-header bg-transparent text-white border-0">
-            <h3 class="card-title">Lienzo Cósmico</h3>
-        </div>
-        <div class="card-body">
-            <canvas id="cosmic-canvas"></canvas>
-            <div class="d-grid gap-2 mt-3">
-                <button id="save-constellation-btn" class="btn btn-light"><i class="fa-solid fa-cloud-arrow-down"></i> Guardar Constelación</button>
-            </div>
-        </div>
-    </section>
-</div>
+                    <section class="card mb-4">
+                        <div class="card-header bg-transparent text-white border-0">
+                            <h3 class="card-title">Lienzo Cósmico</h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="cosmic-canvas"></canvas>
+                            <div class="d-grid gap-2 mt-3">
+                                <button id="save-constellation-btn" class="btn btn-light"><i class="fa-solid fa-cloud-arrow-down"></i> Guardar Constelación</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
                 <div class="col-lg-4">
                     <section class="card mb-4">
                         <div class="card-header bg-transparent text-white border-0">
@@ -99,24 +367,24 @@
 
             <section class="card mb-4">
                 <section class="card mb-4">
-                <div class="card-header bg-transparent text-white border-0">
-                    <h3 class="card-title">Tu Galería de Constelaciones</h3>
-                </div>
-                <div class="card-body">
-                    <div id="constellationCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner" id="gallery-container">
-                            </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#constellationCarousel" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Anterior</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#constellationCarousel" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Siguiente</span>
-                        </button>
+                    <div class="card-header bg-transparent text-white border-0">
+                        <h3 class="card-title">Tu Galería de Constelaciones</h3>
                     </div>
-                </div>
-            </section>
+                    <div class="card-body">
+                        <div id="constellationCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner" id="gallery-container">
+                                </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#constellationCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Anterior</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#constellationCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Siguiente</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
             </section>
 
             <section class="card mb-4">
@@ -125,25 +393,297 @@
                 </div>
                 <div class="card-body">
                     <form id="log-entry-form" class="mb-4">
-    <div class="mb-3">
-        <label for="log-title" class="form-label">Título del Descubrimiento</label>
-        <input type="text" class="form-control" id="log-title">
-    </div>
-    <div class="mb-3">
-        <label for="log-content" class="form-label">Detalles del Viaje</label>
-        <textarea class="form-control" id="log-content" rows="3"></textarea>
-    </div>
-    <button type="submit" class="btn btn-light w-100">Registrar en Bitácora</button>
-</form>
+                        <div class="mb-3">
+                            <label for="log-title" class="form-label">Título del Descubrimiento</label>
+                            <input type="text" class="form-control" id="log-title">
+                        </div>
+                        <div class="mb-3">
+                            <label for="log-content" class="form-label">Detalles del Viaje</label>
+                            <textarea class="form-control" id="log-content" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-light w-100">Registrar en Bitácora</button>
+                    </form>
                     <div id="log-entries-container" class="row g-4">
-                    </div>
+                        </div>
                 </div>
             </section>
-
         </div>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Panel de Control Deslizante ---
+            const panelToggleBtn = document.getElementById('panel-toggle-btn');
+            const cosmicPanel = document.querySelector('.cosmic-panel');
+
+            panelToggleBtn.addEventListener('click', (event) => {
+                event.stopPropagation();
+                cosmicPanel.classList.toggle('open');
+                panelToggleBtn.classList.toggle('open');
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!cosmicPanel.contains(event.target) && !panelToggleBtn.contains(event.target)) {
+                    cosmicPanel.classList.remove('open');
+                    panelToggleBtn.classList.remove('open');
+                }
+            });
+
+            // --- Cambiar Estilos de Constelaciones ---
+            const themeButtons = document.querySelectorAll('.theme-btn');
+            const body = document.body;
+
+            const setTheme = (theme) => {
+                body.className = theme;
+                localStorage.setItem('theme', theme);
+            };
+
+            const savedTheme = localStorage.getItem('theme') || 'orion-theme';
+            setTheme(savedTheme);
+
+            themeButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const selectedTheme = button.dataset.theme;
+                    setTheme(selectedTheme);
+                });
+            });
+
+            // --- Validar Formulario (Terminal de Comunicaciones) ---
+            const contactForm = document.getElementById('contact-form');
+
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const nameInput = document.getElementById('terrestrial-name');
+                const emailInput = document.getElementById('com-frequency');
+                const messageInput = document.getElementById('cosmic-message');
+
+                let allValid = true;
+
+                if (!nameInput.value.trim()) {
+                    nameInput.classList.add('is-invalid');
+                    allValid = false;
+                } else {
+                    nameInput.classList.remove('is-invalid');
+                }
+
+                if (!emailInput.value.trim() || !emailInput.value.includes('@')) {
+                    emailInput.classList.add('is-invalid');
+                    allValid = false;
+                } else {
+                    emailInput.classList.remove('is-invalid');
+                }
+
+                if (!messageInput.value.trim()) {
+                    messageInput.classList.add('is-invalid');
+                    allValid = false;
+                } else {
+                    messageInput.classList.remove('is-invalid');
+                }
+
+                if (allValid) {
+                    alert('¡Señal cósmica enviada con éxito!');
+                    contactForm.reset();
+                    contactForm.classList.remove('was-validated');
+                }
+            });
+
+            // --- Bitácora Estelar ---
+            const logEntryForm = document.getElementById('log-entry-form');
+            const logEntriesContainer = document.getElementById('log-entries-container');
+
+            const loadLogEntries = () => {
+                const entries = JSON.parse(localStorage.getItem('logEntries')) || [];
+                entries.forEach(entry => createLogEntry(entry.title, entry.content));
+            };
+
+            const createLogEntry = (title, content) => {
+                const entryDiv = document.createElement('div');
+                entryDiv.classList.add('col-12', 'col-md-6');
+                entryDiv.innerHTML = `
+                    <div class="log-entry">
+                        <button class="btn btn-danger btn-sm float-end delete-log-btn" data-title="${title}" data-content="${content}">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                        <h5 class="log-entry-title">${title}</h5>
+                        <p class="log-entry-content">${content}</p>
+                    </div>
+                `;
+                logEntriesContainer.prepend(entryDiv);
+
+                const deleteButton = entryDiv.querySelector('.delete-log-btn');
+                deleteButton.addEventListener('click', () => {
+                    entryDiv.remove();
+                    let entries = JSON.parse(localStorage.getItem('logEntries')) || [];
+                    entries = entries.filter(entry => !(entry.title === title && entry.content === content));
+                    localStorage.setItem('logEntries', JSON.stringify(entries));
+                });
+            };
+
+            logEntryForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const title = document.getElementById('log-title').value;
+                const content = document.getElementById('log-content').value;
+
+                if (title && content) {
+                    const entries = JSON.parse(localStorage.getItem('logEntries')) || [];
+                    entries.unshift({
+                        title,
+                        content
+                    });
+                    localStorage.setItem('logEntries', JSON.stringify(entries));
+                    createLogEntry(title, content);
+                    logEntryForm.reset();
+                } else {
+                    alert('¡No puedes dejar campos vacíos en tu bitácora!');
+                }
+            });
+
+            // --- MiniPaint (Lienzo Cósmico) ---
+            const canvas = document.getElementById('cosmic-canvas');
+            const ctx = canvas.getContext('2d');
+            const colorPicker = document.getElementById('star-color');
+            const sizeSlider = document.getElementById('star-size');
+            const starBrushBtn = document.getElementById('star-brush-btn');
+            const cometBrushBtn = document.getElementById('comet-brush-btn');
+            const blackHoleBtn = document.getElementById('black-hole-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const saveBtn = document.getElementById('save-constellation-btn');
+            const galleryContainer = document.getElementById('gallery-container');
+
+            let currentTool = 'star-brush';
+            let isDrawing = false;
+            let particleTimeout = null;
+
+            const setCanvasSize = () => {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = 400;
+            };
+            setCanvasSize();
+            window.addEventListener('resize', setCanvasSize);
+
+            const drawStar = (x, y) => {
+                const size = sizeSlider.value;
+                const color = colorPicker.value;
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(x, y, size / 2, 0, Math.PI * 2);
+                ctx.fill();
+            };
+
+            const drawComet = (x, y) => {
+                const size = sizeSlider.value;
+                const color = colorPicker.value;
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(x, y, size / 2, 0, Math.PI * 2);
+                ctx.fill();
+            };
+
+            const blackHoleErase = (x, y) => {
+                const size = sizeSlider.value * 2;
+                ctx.clearRect(x - size, y - size, size * 2, size * 2);
+            };
+
+            canvas.addEventListener('mousedown', (e) => {
+                isDrawing = true;
+                if (currentTool === 'star-brush') drawStar(e.offsetX, e.offsetY);
+                if (currentTool === 'comet-brush') drawComet(e.offsetX, e.offsetY);
+                if (currentTool === 'black-hole') blackHoleErase(e.offsetX, e.offsetY);
+            });
+
+            canvas.addEventListener('mousemove', (e) => {
+                if (!isDrawing) return;
+                if (currentTool === 'star-brush') {
+                    if (particleTimeout) clearTimeout(particleTimeout);
+                    particleTimeout = setTimeout(() => {
+                        drawStar(e.offsetX, e.offsetY);
+                    }, 10);
+                }
+                if (currentTool === 'comet-brush') drawComet(e.offsetX, e.offsetY);
+                if (currentTool === 'black-hole') blackHoleErase(e.offsetX, e.offsetY);
+            });
+
+            canvas.addEventListener('mouseup', () => isDrawing = false);
+            canvas.addEventListener('mouseout', () => isDrawing = false);
+
+            starBrushBtn.addEventListener('click', () => {
+                currentTool = 'star-brush';
+            });
+            cometBrushBtn.addEventListener('click', () => {
+                currentTool = 'comet-brush';
+            });
+            blackHoleBtn.addEventListener('click', () => {
+                currentTool = 'black-hole';
+            });
+
+            clearBtn.addEventListener('click', () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            });
+
+            saveBtn.addEventListener('click', () => {
+                const name = prompt('Dale un nombre a tu constelación:');
+                if (name) {
+                    const imageData = canvas.toDataURL('image/png');
+                    const gallery = JSON.parse(localStorage.getItem('gallery')) || [];
+                    gallery.unshift({
+                        name,
+                        imageData
+                    });
+                    localStorage.setItem('gallery', JSON.stringify(gallery));
+                    renderGallery();
+                    alert('¡Constelación guardada!');
+                }
+            });
+
+            // --- Renderizado del Carrusel ---
+            const renderGallery = () => {
+                galleryContainer.innerHTML = '';
+                const gallery = JSON.parse(localStorage.getItem('gallery')) || [];
+
+                if (gallery.length === 0) {
+                    galleryContainer.innerHTML = '<p class="text-center p-4 text-muted">No hay constelaciones guardadas aún. ¡Crea la tuya!</p>';
+                    return;
+                }
+
+                gallery.forEach((item, index) => {
+                    const carouselItem = document.createElement('div');
+                    carouselItem.classList.add('carousel-item');
+                    if (index === 0) {
+                        carouselItem.classList.add('active');
+                    }
+
+                    carouselItem.innerHTML = `
+                        <div class="constellation-thumbnail">
+                            <button class="btn btn-danger btn-sm delete-gallery-btn" data-name="${item.name}" data-imageData="${item.imageData}">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                            <img src="${item.imageData}" alt="${item.name}" class="d-block w-100 h-100" style="object-fit: contain;">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>${item.name}</h5>
+                            </div>
+                        </div>
+                    `;
+                    galleryContainer.appendChild(carouselItem);
+
+                    const deleteButton = carouselItem.querySelector('.delete-gallery-btn');
+                    deleteButton.addEventListener('click', () => {
+                        let currentGallery = JSON.parse(localStorage.getItem('gallery')) || [];
+                        currentGallery = currentGallery.filter(galleryItem => {
+                            return galleryItem.name !== item.name || galleryItem.imageData !== item.imageData;
+                        });
+                        localStorage.setItem('gallery', JSON.stringify(currentGallery));
+                        renderGallery();
+                    });
+                });
+            };
+
+            // --- Llamada a las funciones al cargar la página ---
+            loadLogEntries();
+            renderGallery();
+        });
+    </script>
 </body>
 </html>
